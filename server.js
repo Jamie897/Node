@@ -40,6 +40,41 @@ app.post('/users', (req, res) => {
   });
 });
 
+app.put('/users/:id', (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+      res.send(user);
+    }
+  );
+});
+
+app.delete('/users/:id', (req, res) => {
+  User.findOneAndDelete({ _id: req.params.id }, (err, user) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+    res.send(user);
+  });
+});
+
+app.get('/users', (req, res) => {
+  User.find((err, users) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+    res.send(users);
+  });
+});
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server running on port 3000');
